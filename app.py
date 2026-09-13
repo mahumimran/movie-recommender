@@ -16,13 +16,52 @@ MovieMind - Content-Based Movie Recommendation System
 Streamlit front-end. All ML / data-access logic lives in recommender.py;
 this file is only responsible for layout, state, and presentation.
 """
+"""
+app.py
+=================================================
+MovieMind - Content-Based Movie Recommendation System
+=================================================
+"""
+import streamlit as st
+
+# --------------------------------------------------------------------------
+# Page configuration — MUST be the very first Streamlit command
+# --------------------------------------------------------------------------
+st.set_page_config(
+    page_title="MovieMind | Movie Recommendations",
+    page_icon="🎬",
+    layout="wide",
+    initial_sidebar_state="expanded",
+)
+
 import os
 from huggingface_hub import hf_hub_download
+from dotenv import load_dotenv
+
+from recommender import (
+    PLACEHOLDER_POSTER_URL,
+    ModelLoadError,
+    fetch_movie_poster,
+    get_movie_titles,
+    load_model,
+    recommend_movies,
+)
+
+load_dotenv()
 
 REPO_ID = "Mahi211/moviemind-artifacts"
 
-os.environ["MOVIE_DICT_PATH"] = hf_hub_download(repo_id=REPO_ID, filename="movie_dict.pkl", repo_type="dataset")
-os.environ["SIMILARITY_PATH"] = hf_hub_download(repo_id=REPO_ID, filename="similarity.pkl", repo_type="dataset")
+
+@st.cache_resource(show_spinner="Downloading model files...")
+def download_model_files():
+    movie_dict_path = hf_hub_download(repo_id=REPO_ID, filename="movie_dict.pkl", repo_type="dataset")
+    similarity_path = hf_hub_download(repo_id=REPO_ID, filename="similarity.pkl", repo_type="dataset")
+    return movie_dict_path, similarity_path
+
+
+MOVIE_DICT_PATH, SIMILARITY_PATH = download_model_files()
+os.environ["MOVIE_DICT_PATH"] = MOVIE_DICT_PATH
+os.environ["SIMILARITY_PATH"] = SIMILARITY_PATH
 
 import streamlit as st
 from dotenv import load_dotenv
