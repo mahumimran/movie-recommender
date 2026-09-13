@@ -17,22 +17,16 @@ Streamlit front-end. All ML / data-access logic lives in recommender.py;
 this file is only responsible for layout, state, and presentation.
 """
 import os
-import shutil
 from huggingface_hub import hf_hub_download
 
-MODEL_DIR = "models"
 REPO_ID = "Mahi211/moviemind-artifacts"
 
-os.makedirs(MODEL_DIR, exist_ok=True)
-
-for filename in ["movie_dict.pkl", "similarity.pkl"]:
-    local_path = os.path.join(MODEL_DIR, filename)
-    if not os.path.exists(local_path):
-        downloaded = hf_hub_download(repo_id=REPO_ID, filename=filename, repo_type="dataset")
-        shutil.copy(downloaded, local_path)
+os.environ["MOVIE_DICT_PATH"] = hf_hub_download(repo_id=REPO_ID, filename="movie_dict.pkl", repo_type="dataset")
+os.environ["SIMILARITY_PATH"] = hf_hub_download(repo_id=REPO_ID, filename="similarity.pkl", repo_type="dataset")
 
 import streamlit as st
 from dotenv import load_dotenv
+...
 
 from recommender import (
     PLACEHOLDER_POSTER_URL,

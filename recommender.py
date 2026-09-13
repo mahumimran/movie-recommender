@@ -20,8 +20,8 @@ import streamlit as st
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODELS_DIR = os.path.join(BASE_DIR, "models")
 
-MOVIE_DICT_PATH = os.path.join(MODELS_DIR, "movie_dict.pkl")
-SIMILARITY_PATH = os.path.join(MODELS_DIR, "similarity.pkl")
+MOVIE_DICT_PATH = os.environ.get("MOVIE_DICT_PATH", os.path.join(MODELS_DIR, "movie_dict.pkl"))
+SIMILARITY_PATH = os.environ.get("SIMILARITY_PATH", os.path.join(MODELS_DIR, "similarity.pkl"))
 
 TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500"
 TMDB_API_BASE_URL = "https://api.themoviedb.org/3"
