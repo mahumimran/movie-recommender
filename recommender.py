@@ -20,9 +20,6 @@ import streamlit as st
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODELS_DIR = os.path.join(BASE_DIR, "models")
 
-MOVIE_DICT_PATH = os.environ.get("MOVIE_DICT_PATH", os.path.join(MODELS_DIR, "movie_dict.pkl"))
-SIMILARITY_PATH = os.environ.get("SIMILARITY_PATH", os.path.join(MODELS_DIR, "similarity.pkl"))
-
 TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500"
 TMDB_API_BASE_URL = "https://api.themoviedb.org/3"
 REQUEST_TIMEOUT_SECONDS = 6
@@ -63,23 +60,25 @@ def load_model():
     Raises:
         ModelLoadError: if the model files are missing or unreadable.
     """
-    if not os.path.exists(MOVIE_DICT_PATH) or not os.path.exists(SIMILARITY_PATH):
+    movie_dict_path = os.environ.get("MOVIE_DICT_PATH", os.path.join(MODELS_DIR, "movie_dict.pkl"))
+    similarity_path = os.environ.get("SIMILARITY_PATH", os.path.join(MODELS_DIR, "similarity.pkl"))
+
+    if not os.path.exists(movie_dict_path) or not os.path.exists(similarity_path):
         raise ModelLoadError(
             "Model files not found. Please run 'python preprocess.py' first "
             "to generate 'models/movie_dict.pkl' and 'models/similarity.pkl'."
         )
 
     try:
-        with open(MOVIE_DICT_PATH, "rb") as f:
+        with open(movie_dict_path, "rb") as f:
             movie_dict = pickle.load(f)
-        with open(SIMILARITY_PATH, "rb") as f:
+        with open(similarity_path, "rb") as f:
             similarity = pickle.load(f)
     except Exception as exc:  # noqa: BLE001 - surface a clean, safe message
         raise ModelLoadError(f"Failed to load model files: {exc}") from exc
 
     movies_df = pd.DataFrame(movie_dict)
     return movies_df, similarity
-
 
 def get_movie_titles(movies_df: pd.DataFrame):
     """Return a sorted list of all available movie titles."""
