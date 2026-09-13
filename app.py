@@ -7,21 +7,6 @@ MovieMind - Content-Based Movie Recommendation System
 Streamlit front-end. All ML / data-access logic lives in recommender.py;
 this file is only responsible for layout, state, and presentation.
 """
-"""
-app.py
-=================================================
-MovieMind - Content-Based Movie Recommendation System
-=================================================
-
-Streamlit front-end. All ML / data-access logic lives in recommender.py;
-this file is only responsible for layout, state, and presentation.
-"""
-"""
-app.py
-=================================================
-MovieMind - Content-Based Movie Recommendation System
-=================================================
-"""
 import streamlit as st
 
 # --------------------------------------------------------------------------
@@ -47,6 +32,8 @@ from recommender import (
     recommend_movies,
 )
 
+# Load variables from a local .env file if present (no-op on Streamlit Cloud,
+# where TMDB_API_KEY is provided via the Secrets panel instead).
 load_dotenv()
 
 REPO_ID = "Mahi211/moviemind-artifacts"
@@ -62,32 +49,6 @@ def download_model_files():
 MOVIE_DICT_PATH, SIMILARITY_PATH = download_model_files()
 os.environ["MOVIE_DICT_PATH"] = MOVIE_DICT_PATH
 os.environ["SIMILARITY_PATH"] = SIMILARITY_PATH
-
-import streamlit as st
-from dotenv import load_dotenv
-...
-
-from recommender import (
-    PLACEHOLDER_POSTER_URL,
-    ModelLoadError,
-    fetch_movie_poster,
-    get_movie_titles,
-    load_model,
-    recommend_movies,
-)
-# Load variables from a local .env file if present (no-op on Railway,
-# where TMDB_API_KEY is provided via Railway's Variables panel instead).
-load_dotenv()
-
-# --------------------------------------------------------------------------
-# Page configuration
-# --------------------------------------------------------------------------
-st.set_page_config(
-    page_title="MovieMind | Movie Recommendations",
-    page_icon="🎬",
-    layout="wide",
-    initial_sidebar_state="expanded",
-)
 
 # --------------------------------------------------------------------------
 # Custom CSS - dark cinematic theme with animation
