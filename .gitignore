@@ -1,0 +1,30 @@
+# Environment variables (never commit real secrets)
+.env
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Trained model files are NOT committed to GitHub:
+# similarity.pkl can exceed 100MB, which is over GitHub's file size limit.
+# start.sh automatically regenerates these from data/ at startup instead.
+models/*.pkl
+
+# NOTE: data/ (the CSV datasets) is intentionally NOT ignored.
+# Railway needs the CSVs present in the repo so it can run
+# preprocess.py at startup to (re)build the model files.
